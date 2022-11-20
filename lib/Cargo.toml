@@ -1,10 +1,10 @@
 [package]
 name = "ethiopic-calendar"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["Frectonz"]
 license = "MIT"
 documentation = "https://docs.rs/ethiopic-calendar"
-homepage = "https://github.com/frectonz/mek’ut’erīya/lib"
-repository = "https://github.com/frectonz/mek’ut’erīya/lib"
+homepage = "https://github.com/frectonz/mek-ut-er-ya/tree/trunk/lib"
+repository = "https://github.com/frectonz/mek-ut-er-ya/tree/trunk/lib"
 description = "Ethiopian calendar implementation in Rust"
