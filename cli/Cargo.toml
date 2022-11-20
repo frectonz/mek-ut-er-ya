@@ -4,9 +4,14 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Frectonz"]
 license = "MIT"
+documentation = "https://docs.rs/ethiopic-calendar"
+homepage = "https://github.com/frectonz/mek-ut-er-ya/"
+repository = "https://github.com/frectonz/mek-ut-er-ya/"
+description = "Ethiopian calendar implementation in Rust"
+readme = "../README.md"
 
 [dependencies]
 clap = { version = "4.0", features = ["derive"] }
 colored = "2.0.0"
-ethiopic-calendar = { path = "../lib" }
+ethiopic-calendar = "0.1.2"
 time = "0.3"
