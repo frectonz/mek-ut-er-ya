@@ -4,7 +4,6 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Frectonz"]
 license = "MIT"
-license-file = "../LICENSE"
 documentation = "https://docs.rs/ethiopic-calendar"
 homepage = "https://github.com/frectonz/mek’ut’erīya"
 repository = "https://github.com/frectonz/mek’ut’erīya"
