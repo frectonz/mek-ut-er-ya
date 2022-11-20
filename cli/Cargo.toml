@@ -1,0 +1,12 @@
+[package]
+name = "mekuteriya"
+version = "0.1.0"
+edition = "2021"
+authors = ["Frectonz"]
+license = "MIT"
+
+[dependencies]
+clap = { version = "4.0", features = ["derive"] }
+colored = "2.0.0"
+ethiopic-calendar = { path = "../lib" }
+time = "0.3"
