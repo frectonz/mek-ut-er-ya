@@ -69,7 +69,7 @@ dependencies = [
 
 [[package]]
 name = "ethiopic-calendar"
-version = "0.1.0"
+version = "0.1.1"
 
 [[package]]
 name = "heck"
