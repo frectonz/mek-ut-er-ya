@@ -2,6 +2,16 @@
 
 A simple program for handling Ethiopian calendar dates.
 
+## Installation
+
+```sh
+cargo install mekuteriya
+```
+
+## Demo
+
+[![asciicast](https://asciinema.org/a/539058.svg)](https://asciinema.org/a/539058)
+
 ## Source
 
 - [Formula for converting Ethiopian date from and to Julian day number](https://www.geez.org/Calendars/)
