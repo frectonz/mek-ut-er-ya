@@ -33,6 +33,8 @@ enum Action {
     /// Display the current month in the Ethiopian calendar. (alias: cal)
     #[command(alias = "cal")]
     Calendar,
+    /// Display the current year in the Ethiopian calendar.
+    Year,
 }
 
 fn main() {
@@ -47,17 +49,62 @@ fn main() {
             do_ethiopian_to_gregorian(year, month, day)
         }
         Action::Calendar => do_calendar(),
+        Action::Year => do_year(),
     };
 }
 
-fn do_now() {
+fn get_now() -> EthiopianYear {
     let now = OffsetDateTime::now_utc();
     let gregorian = GregorianYear::new(
         now.year() as usize,
         W(now.month()).into(),
         now.day() as usize,
     );
-    let ethiopian: EthiopianYear = gregorian.into();
+    gregorian.into()
+}
+
+fn format_month(month: usize, year: usize, highlight_day: Option<usize>) -> Vec<String> {
+    let first_day = EthiopianYear::new(year, month, 1);
+    let month = first_day.amharic_month();
+    let year = first_day.formatted_year();
+    let month_title = format!("{} {}", month, year);
+
+    let mut list = Vec::with_capacity(7);
+
+    list.push(format!("{:^20}", month_title.green().bold()));
+    let header = "Su Mo Tu We Th Fr Sa".to_string();
+    list.push(header.green().bold().to_string());
+
+    let mut line: String;
+    let mut day = 1;
+    let mut weekday = first_day.weekday();
+    while day <= first_day.days_in_month() {
+        line = String::new();
+        while weekday < 7 && day <= first_day.days_in_month() {
+            if day == 1 {
+                line.push_str(" ".repeat(weekday * 3).as_str());
+            }
+
+            if day == highlight_day.unwrap_or(31) {
+                line.push_str(&format!("{:2} ", day.to_string().white().bold().on_black()));
+            } else {
+                line.push_str(&format!("{:2} ", day));
+            }
+
+            day += 1;
+            weekday += 1;
+        }
+        weekday = 0;
+        let padding = header.len().checked_sub(line.len()).unwrap_or(0);
+        line.push_str(&" ".repeat(padding));
+        list.push(line);
+    }
+
+    list
+}
+
+fn do_now() {
+    let ethiopian = get_now();
     let month = ethiopian.amharic_month();
     let day = ethiopian.amharic_weekday();
 
@@ -118,45 +165,41 @@ fn do_ethiopian_to_gregorian(y: usize, m: usize, d: usize) {
 }
 
 fn do_calendar() {
-    let now = OffsetDateTime::now_utc();
-    let gregorian = GregorianYear::new(
-        now.year() as usize,
-        W(now.month()).into(),
-        now.day() as usize,
-    );
-    let ethiopian: EthiopianYear = gregorian.into();
+    let ethiopian: EthiopianYear = get_now();
+    let lines = format_month(ethiopian.month(), ethiopian.year(), Some(ethiopian.day()));
+    lines.into_iter().for_each(|l| println!("{}", l.green()));
+}
 
-    let first_day = EthiopianYear::new(ethiopian.year(), ethiopian.month(), 1);
-
-    let month = ethiopian.amharic_month();
-    let year = ethiopian.formatted_year();
-    let month_title = format!("{} {}", month, year);
-
-    let month = format!("\n{:^20}\n", month_title.green().bold());
-    println!("{}", month);
-
-    println!("Su Mo Tu We Th Fr Sa");
-    let mut line: String;
-    let mut day = 1;
-    let mut weekday = first_day.weekday();
-    while day <= 30 {
-        line = String::new();
-        while weekday < 7 && day <= 30 {
-            if day == 1 {
-                line.push_str(" ".repeat(weekday * 3).as_str());
+fn do_year() {
+    let ethiopian = get_now();
+    let mut group = Vec::with_capacity(3);
+    let mut max_number_of_lines = 0;
+    for month in 1..=13 {
+        let highlight_day = if month == ethiopian.month() {
+            Some(ethiopian.day())
+        } else {
+            None
+        };
+        let lines = format_month(month, ethiopian.year(), highlight_day);
+        max_number_of_lines = lines.len().max(max_number_of_lines);
+        group.push(lines);
+        if month % 3 == 0 || month == 13 {
+            let mut lines = Vec::with_capacity(7);
+            for i in 0..=max_number_of_lines - 1 {
+                let mut line = String::new();
+                for e in &group {
+                    let padding = " ".repeat(20);
+                    let e = e.get(i).map(|a| a.as_str()).unwrap_or(&padding);
+                    line.push_str(e);
+                    line.push_str("\t");
+                }
+                lines.push(line);
             }
-
-            if day == ethiopian.day() {
-                line.push_str(&format!("{:2} ", day.to_string().bold().black().on_white()));
-            } else {
-                line.push_str(&format!("{:2} ", day));
-            }
-
-            day += 1;
-            weekday += 1;
+            lines.into_iter().for_each(|l| println!("{}", l.green()));
+            group.clear();
+            println!();
+            max_number_of_lines = 0;
         }
-        weekday = 0;
-        println!("{}", line);
     }
 }
 

@@ -84,6 +84,18 @@ impl EthiopianYear {
     pub fn formatted_year(&self) -> String {
         format!("{:04}", self.year)
     }
+
+    pub fn days_in_month(&self) -> usize {
+        if self.month == 13 {
+            if self.year % 4 == 3 {
+                6
+            } else {
+                5
+            }
+        } else {
+            30
+        }
+    }
 }
 
 fn quotient(a: f64, b: f64) -> f64 {
