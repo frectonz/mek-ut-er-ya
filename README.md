@@ -5,7 +5,7 @@ A simple program for handling Ethiopian calendar dates.
 ## Installation
 
 ```sh
-cargo install mekuteriya
+cargo install --git https://github.com/frectonz/mek-ut-er-ya
 ```
 
 ## Demo
