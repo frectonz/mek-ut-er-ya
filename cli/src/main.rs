@@ -35,6 +35,8 @@ enum Action {
     Calendar,
     /// Display the current year in the Ethiopian calendar.
     Year,
+    /// Display how much of the current year has passed in the Ethiopian calendar.
+    Progress,
 }
 
 fn main() {
@@ -50,6 +52,7 @@ fn main() {
         }
         Action::Calendar => do_calendar(),
         Action::Year => do_year(),
+        Action::Progress => do_progress(),
     };
 }
 
@@ -201,6 +204,37 @@ fn do_year() {
             max_number_of_lines = 0;
         }
     }
+}
+
+fn do_progress() {
+    let ethiopian_now = get_now();
+    let next_year = EthiopianYear::new(ethiopian_now.year() + 1, 1, 1);
+    let jdn_beginning_of_year = EthiopianYear::new(ethiopian_now.year(), 1, 1).to_jdn();
+
+    let jdn_elapsed = ethiopian_now.to_jdn() - jdn_beginning_of_year;
+    let jdn_total = next_year.to_jdn() - jdn_beginning_of_year;
+
+    let percentage = (jdn_elapsed as f64 / jdn_total as f64) * 100.0;
+
+    let scale_factor = 3.;
+    let percent = percentage / scale_factor;
+
+    let mut progress = String::new();
+    let mut i = 0;
+    while i < (100. / scale_factor) as usize {
+        if i < percent as usize {
+            progress.push_str("▓");
+        } else {
+            progress.push_str("░");
+        }
+        i += 1;
+    }
+
+    println!(
+        "\n{} [{}]\n",
+        progress.green().on_bright_black(),
+        format!("{}%", percentage.round()).green()
+    );
 }
 
 struct W<T>(T);
