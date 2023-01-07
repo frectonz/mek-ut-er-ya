@@ -1,2 +1,9 @@
 [workspace]
 members = ["lib", "cli"]
+
+[profile.release]
+strip = true
+opt-level = "z"  # Optimize for size.
+lto = true
+codegen-units = 1
+panic = "abort"
