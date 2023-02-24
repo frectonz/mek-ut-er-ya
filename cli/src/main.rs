@@ -108,6 +108,7 @@ fn format_month(month: usize, year: usize, highlight_day: Option<usize>) -> Vec<
 
 fn do_now() {
     let ethiopian = get_now();
+
     let month = ethiopian.amharic_month();
     let day = ethiopian.amharic_weekday();
 

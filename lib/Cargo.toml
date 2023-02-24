@@ -8,3 +8,6 @@ documentation = "https://docs.rs/ethiopic-calendar"
 homepage = "https://github.com/frectonz/mek-ut-er-ya/tree/trunk/lib"
 repository = "https://github.com/frectonz/mek-ut-er-ya/tree/trunk/lib"
 description = "Ethiopian calendar implementation in Rust"
+
+[dependencies]
+hifitime = "3.8.0"
