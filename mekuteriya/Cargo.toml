@@ -9,6 +9,7 @@ homepage = "https://github.com/frectonz/mek-ut-er-ya/"
 repository = "https://github.com/frectonz/mek-ut-er-ya/"
 description = "Ethiopian calendar implementation in Rust"
 readme = "../README.md"
+default-run = "mekuteriya"
 
 [dependencies]
 clap = { version = "4.0", features = ["derive"] }

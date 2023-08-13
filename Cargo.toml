@@ -1,5 +1,5 @@
 [workspace]
-members = ["lib", "cli"]
+members = [ "ethiopic-calendar", "mekuteriya" ]
 
 [profile.release]
 strip = true
