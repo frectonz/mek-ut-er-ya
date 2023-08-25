@@ -2,6 +2,12 @@
 
 A simple program for handling Ethiopian calendar dates.
 
+## Run it with Nix
+
+```bash
+nix run github:frectonz/mek-ut-er-ya
+````
+
 ## Installation
 
 ```sh
