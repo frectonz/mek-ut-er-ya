@@ -18,7 +18,6 @@
         rust-overlay.follows = "rust-overlay";
       };
     };
-
   };
   outputs = { self, nixpkgs, flake-utils, rust-overlay, crane }:
     flake-utils.lib.eachDefaultSystem (system:
@@ -40,11 +39,9 @@
         bin = craneLib.buildPackage (commonArgs // {
           inherit cargoArtifacts;
         });
-
       in
       with pkgs;
       {
-
         packages = {
           inherit bin;
           default = bin;
