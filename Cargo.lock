@@ -137,15 +137,15 @@ dependencies = [
 [[package]]
 name = "ethiopic-calendar"
 version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1727f652127352dd7e7c3a9b738211f871f47d186e67178583e8a82bbd6abd6a"
 dependencies = [
  "hifitime",
 ]
 
 [[package]]
 name = "ethiopic-calendar"
-version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1727f652127352dd7e7c3a9b738211f871f47d186e67178583e8a82bbd6abd6a"
+version = "0.1.5"
 dependencies = [
  "hifitime",
 ]
@@ -247,11 +247,11 @@ checksum = "a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24"
 
 [[package]]
 name = "mekuteriya"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "clap",
  "colored",
- "ethiopic-calendar 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "ethiopic-calendar 0.1.4",
  "time",
 ]
 
