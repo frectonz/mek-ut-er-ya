@@ -20,10 +20,7 @@
           pname = "mekuteriya";
           version = "latest";
           src = ./.;
-
-          cargoLock = {
-            lockFile = ./Cargo.lock;
-          };
+          cargoLock.lockFile = ./Cargo.lock;
         };
       in
       {
@@ -35,6 +32,7 @@
         devShells.default = pkgs.mkShell {
           buildInputs = [
             pkgs.rust-bin.stable.latest.default
+            pkgs.rust-analyzer
           ];
         };
 
