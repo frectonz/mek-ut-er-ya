@@ -4,58 +4,27 @@
     flake-utils.url = "github:numtide/flake-utils";
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
-    };
-
-    crane = {
-      url = "github:ipetkov/crane";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-        rust-overlay.follows = "rust-overlay";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { self, nixpkgs, flake-utils, rust-overlay, crane }:
+  outputs = { self, nixpkgs, flake-utils, rust-overlay }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         overlays = [ (import rust-overlay) ];
         pkgs = import nixpkgs {
           inherit system overlays;
         };
-
-        craneLib = crane.lib.${system};
-        src = craneLib.cleanCargoSource (craneLib.path ./mekuteriya);
-
-        commonArgs = {
-          inherit src;
-          cargoVendorDir = craneLib.vendorCargoDeps { cargoLock = ./Cargo.lock; };
-        };
-
-        cargoArtifacts = craneLib.buildDepsOnly commonArgs;
-        bin = craneLib.buildPackage (commonArgs // {
-          inherit cargoArtifacts;
-        });
       in
-      with pkgs;
       {
-        packages = {
-          inherit bin;
-          default = bin;
-        };
+        packages = { };
 
-        devShells.default = mkShell {
+        devShells.default = pkgs.mkShell {
           buildInputs = [
-            rust-bin.stable.latest.default
-            rust-analyzer
-            nil
+            pkgs.rust-bin.stable.latest.default
           ];
         };
 
-        formatter = nixpkgs-fmt;
+        formatter = pkgs.nixpkgs-fmt;
       }
     );
 }
