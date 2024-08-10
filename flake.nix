@@ -14,9 +14,23 @@
         pkgs = import nixpkgs {
           inherit system overlays;
         };
+
+        stable = pkgs.callPackage ./package.nix { };
+        latest = pkgs.rustPlatform.buildRustPackage {
+          pname = "mekuteriya";
+          version = "latest";
+          src = ./.;
+
+          cargoLock = {
+            lockFile = ./Cargo.lock;
+          };
+        };
       in
       {
-        packages = { };
+        packages = {
+          inherit stable;
+          default = latest;
+        };
 
         devShells.default = pkgs.mkShell {
           buildInputs = [
