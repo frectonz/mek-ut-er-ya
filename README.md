@@ -17,17 +17,10 @@ cargo install --git https://github.com/frectonz/mek-ut-er-ya
 If you don't have Rust installed, you can use the pre-built binaries from the [releases](https://github.com/frectonz/mek-ut-er-ya/releases) page.
 
 Download the binary for your platform.
-
-- If you are on apple download the file that ends with `x86_64-apple-darwin.zip`
 - If you are on windows download the file that ends with `x86_64-pc-windows-gnu.zip`
-- If you are on linux download one of the files that end with the following:
-  - `x86_64-unknown-linux-musl.tar.gz`
-  - `x86_64-unknown-linux-musl.tar.xz`
-  - `x86_64-unknown-linux-musl.tar.zst`
+- If you are on linux download one of the files ends with `x86_64-unknown-linux-musl.tar.gz`
 
-For linux users there is no difference between the three files. You can use any of them. The difference is the compression algorithm used. So you can choose the one with the smallest size.
-
-If you are own linux, you can use the following command to extract the binary from the archive:
+If you are on linux, you can use the following command to extract the binary from the archive:
 
 ```sh
 tar xvf <downloaded_file>
