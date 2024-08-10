@@ -1,6 +1,8 @@
 # .github/workflows/release.yml
 # Taken from https://github.com/rust-build/rust-build.action
 
+name: Release
+
 on:
   release:
     types: [created]
