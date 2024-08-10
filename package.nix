@@ -14,9 +14,10 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-WkrlQbNTP3lNEtlnAMrTd9lBo2Q4dECqtV29kmV8F7A=";
 
   meta = {
-    description = "A simple program for handling Ethiopian calendar dates.";
+    description = "Ethiopian Calendar CLI";
     homepage = "https://github.com/frectonz/mek-ut-er-ya";
-    license = lib.licenses.unlicense;
+    mainProgram = "mekuteriya";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
