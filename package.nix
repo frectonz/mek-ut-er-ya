@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mekuteriya";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "frectonz";
     repo = "mek-ut-er-ya";
     rev = version;
-    hash = "sha256-ar69qGjvq+jur+WfomVau3UM7Fna7UGzzBJMx9h8+pI=";
+    hash = "sha256-bWp2UNrhCHY2DQWusGS9L9/jI2r23F34yLpuE6nuOD0=";
   };
 
-  cargoHash = "sha256-LyCMZpcuynXQaXpuC7iI3b65dXepoBDNAtcfxmCqEVk=";
+  cargoHash = "sha256-WkrlQbNTP3lNEtlnAMrTd9lBo2Q4dECqtV29kmV8F7A=";
 
   meta = {
     description = "A simple program for handling Ethiopian calendar dates.";
