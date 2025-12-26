@@ -64,6 +64,25 @@ impl EthiopianYear {
         }
     }
 
+    pub fn english_month(&self) -> &'static str {
+        match self.month {
+            1 => "Meskerem",
+            2 => "Tikimt",
+            3 => "Hidar",
+            4 => "Tahesas",
+            5 => "Ter",
+            6 => "Yekatit",
+            7 => "Megabit",
+            8 => "Miazza",
+            9 => "Ginbot",
+            10 => "Sene",
+            11 => "Hamle",
+            12 => "Nahasie",
+            13 => "Pagume",
+            _ => unreachable!(),
+        }
+    }
+
     pub fn weekday(&self) -> usize {
         (self.to_jdn() as usize + 1) % 7
     }
