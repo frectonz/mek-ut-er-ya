@@ -1,6 +1,6 @@
 [package]
 name = "mekuteriya"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 authors = ["Frectonz"]
 license = "MIT"
@@ -14,5 +14,5 @@ default-run = "mekuteriya"
 [dependencies]
 clap = { version = "4.0", features = ["derive"] }
 colored = "2.0.0"
-ethiopic-calendar = { version = "0.1.4" }
+ethiopic-calendar = { version = "0.1.6", path = "../ethiopic-calendar" }
 time = "0.3"

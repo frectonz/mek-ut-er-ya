@@ -1,6 +1,7 @@
 use clap::{command, Parser};
 use colored::Colorize;
 use ethiopic_calendar::{EthiopianYear, GregorianYear};
+use std::str::FromStr;
 use time::{Month, OffsetDateTime};
 
 /// Simple program for handling Ethiopian dates.
@@ -32,11 +33,35 @@ enum Action {
     },
     /// Display the current month in the Ethiopian calendar. (alias: cal)
     #[command(alias = "cal")]
-    Calendar,
+    Calendar {
+        #[arg(short, long, value_parser = Language::from_str, default_value = "english")]
+        language: Language,
+    },
     /// Display the current year in the Ethiopian calendar.
-    Year,
+    Year {
+        #[arg(short, long, value_parser = Language::from_str, default_value = "english")]
+        language: Language,
+    },
     /// Display how much of the current year has passed in the Ethiopian calendar.
     Progress,
+}
+
+#[derive(clap::ValueEnum, Debug, Clone)]
+pub enum Language {
+    Amharic,
+    English,
+}
+
+impl FromStr for Language {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "amharic" => Ok(Language::Amharic),
+            "english" => Ok(Language::English),
+            _ => Err(format!("Invalid language: {}", s)),
+        }
+    }
 }
 
 fn main() {
@@ -50,8 +75,8 @@ fn main() {
         Action::EthiopianToGregorian { year, month, day } => {
             do_ethiopian_to_gregorian(year, month, day)
         }
-        Action::Calendar => do_calendar(),
-        Action::Year => do_year(),
+        Action::Calendar { language } => do_calendar(language),
+        Action::Year { language } => do_year(language),
         Action::Progress => do_progress(),
     };
 }
@@ -66,17 +91,28 @@ fn get_now() -> EthiopianYear {
     gregorian.into()
 }
 
-fn format_month(month: usize, year: usize, highlight_day: Option<usize>) -> Vec<String> {
+fn format_month(
+    month: usize,
+    year: usize,
+    highlight_day: Option<usize>,
+    language: Language,
+) -> Vec<String> {
     let first_day = EthiopianYear::new(year, month, 1);
-    let month = first_day.amharic_month();
+    let month = match language {
+        Language::Amharic => first_day.amharic_month(),
+        Language::English => first_day.english_month(),
+    };
     let year = first_day.formatted_year();
-    let month_title = format!("{} {}", month, year);
+    let month_title = format!("{month} {year}");
+    let header = match language {
+        Language::Amharic => "እሁ ሰኞ ማክ ረቡ ሐሙ ዓር ቅዳ".to_string(),
+        Language::English => "Su Mo Tu We Th Fr Sa".to_string(),
+    };
 
     let mut list = Vec::with_capacity(7);
 
-    list.push(format!("{:^20}", month_title.green().bold()));
-    let header = "Su Mo Tu We Th Fr Sa".to_string();
-    list.push(header.green().bold().to_string());
+    list.push(format!("{:^20}", month_title.green()));
+    list.push(header.green().to_string());
 
     let mut line: String;
     let mut day = 1;
@@ -88,17 +124,25 @@ fn format_month(month: usize, year: usize, highlight_day: Option<usize>) -> Vec<
                 line.push_str(" ".repeat(weekday * 3).as_str());
             }
 
+            let padding = if weekday == 6 { "" } else { " " };
+
             if day == highlight_day.unwrap_or(31) {
-                line.push_str(&format!("{:2} ", day.to_string().white().bold().on_black()));
+                line.push_str(&format!(
+                    "{:2}{padding}",
+                    day.to_string().white().on_black()
+                ));
             } else {
-                line.push_str(&format!("{:2} ", day));
+                line.push_str(&format!("{:2}{padding}", day));
             }
 
             day += 1;
             weekday += 1;
         }
         weekday = 0;
-        let padding = header.len().checked_sub(line.len()).unwrap_or(0);
+
+        let char_count = line.chars().count();
+        let padding = 20_usize.saturating_sub(char_count);
+
         line.push_str(&" ".repeat(padding));
         list.push(line);
     }
@@ -168,13 +212,18 @@ fn do_ethiopian_to_gregorian(y: usize, m: usize, d: usize) {
     println!("{}", output.green());
 }
 
-fn do_calendar() {
+fn do_calendar(language: Language) {
     let ethiopian: EthiopianYear = get_now();
-    let lines = format_month(ethiopian.month(), ethiopian.year(), Some(ethiopian.day()));
+    let lines = format_month(
+        ethiopian.month(),
+        ethiopian.year(),
+        Some(ethiopian.day()),
+        language,
+    );
     lines.into_iter().for_each(|l| println!("{}", l.green()));
 }
 
-fn do_year() {
+fn do_year(language: Language) {
     let ethiopian = get_now();
     let mut group = Vec::with_capacity(3);
     let mut max_number_of_lines = 0;
@@ -184,7 +233,7 @@ fn do_year() {
         } else {
             None
         };
-        let lines = format_month(month, ethiopian.year(), highlight_day);
+        let lines = format_month(month, ethiopian.year(), highlight_day, language.clone());
         max_number_of_lines = lines.len().max(max_number_of_lines);
         group.push(lines);
         if month % 3 == 0 || month == 13 {
@@ -195,7 +244,7 @@ fn do_year() {
                     let padding = " ".repeat(20);
                     let e = e.get(i).map(|a| a.as_str()).unwrap_or(&padding);
                     line.push_str(e);
-                    line.push_str("\t");
+                    line.push('\t');
                 }
                 lines.push(line);
             }
@@ -224,9 +273,9 @@ fn do_progress() {
     let mut i = 0;
     while i < (100. / scale_factor) as usize {
         if i < percent as usize {
-            progress.push_str("▓");
+            progress.push('▓');
         } else {
-            progress.push_str("░");
+            progress.push('░');
         }
         i += 1;
     }
